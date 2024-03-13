@@ -4,6 +4,7 @@
 mod vga_buffer;
 
 use core::panic::PanicInfo;
+use core::fmt::Write;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -12,7 +13,8 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    vga_buffer::print_someting(); 
+    vga_buffer::WRITER.lock().write_str("hello again").unwrap();
+    write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}", 42, 3.1).unwrap();
 
     loop {}
 }
